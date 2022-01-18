@@ -1,6 +1,6 @@
 package com.decastrofinalproject.jackenpoyinanotherworld.characters;
 
-public class Characters {
+public class Characters implements Character{
     protected int hp;
     protected int characterImg;
     protected int dmg;
