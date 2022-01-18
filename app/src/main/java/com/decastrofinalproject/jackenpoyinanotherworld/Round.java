@@ -24,7 +24,9 @@ import java.util.Random;
 public class Round extends AppCompatActivity {
     private Characters character;
     private Characters[] enemies;
+    private SharedPreferenceAccessor sharedPreference;
     private int enemyIndex;
+    private int round;
     private int[] enemyWeapons = {R.drawable.rock, R.drawable.paper, R.drawable.scissors};
     private TextView enemyName;
     private ImageView enemyImage;
@@ -42,8 +44,8 @@ public class Round extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_round);
 
-        SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
-        int round = Integer.parseInt(sharedPreference.getData("savedInfo", "round"));
+        sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
+        round = Integer.parseInt(sharedPreference.getData("savedInfo", "round"));
         String side = sharedPreference.getData("savedInfo", "side");
         CharacterRoles characterRoles = new CharacterRoles(side);
         enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
@@ -60,6 +62,7 @@ public class Round extends AppCompatActivity {
         }
         catch (ArrayIndexOutOfBoundsException e){
             sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
+            refresh();
         }
 
 
@@ -87,7 +90,18 @@ public class Round extends AppCompatActivity {
         enemies[enemyIndex].setHp(hp);
         enemyHp.setProgress(hp);
         if(hp <= 0){
-            enemyIndex++;
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                try{
+                    enemyIndex++;
+                    setEnemyMaxHp(enemies[enemyIndex].getHp());
+                }
+                catch (ArrayIndexOutOfBoundsException e){
+                    sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
+                    refresh();
+                }
+            }, 1000);
+
         }
     }
     public void setMyHpNow(int hp){
@@ -95,11 +109,13 @@ public class Round extends AppCompatActivity {
         myHp.setProgress(hp);
         if(hp <= 0){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Game over! You lose!"), Toast.LENGTH_LONG).show();
-            Intent home = new Intent(Round.this, HomeActivity.class);
-            SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
-            sharedPreference.setData("savedInfo", "round", "1");
-            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(home);
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                Intent home = new Intent(Round.this, HomeActivity.class);
+                sharedPreference.setData("savedInfo", "round", "1");
+                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(home);
+            }, 300);
         }
     }
     public void determineWinner(int youWeapon){
@@ -141,5 +157,11 @@ public class Round extends AppCompatActivity {
         scissors.setVisibility(visibility);
         yourWeapon.setVisibility(visibility2);
         enemyWeapon.setVisibility(visibility2);
+    }
+    public void refresh(){
+        finish();
+        overridePendingTransition( 0, 0);
+        startActivity(getIntent());
+        overridePendingTransition( 0, 0);
     }
 }
