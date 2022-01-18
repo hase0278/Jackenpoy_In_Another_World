@@ -9,12 +9,11 @@ public class Characters {
     public void setHp(int hp){
         this.hp = hp;
     }
-    public void setCharacterImg(int characterImg){
-        this.characterImg = characterImg;
-    }
+
     public void setDmg(int dmg){
         this.dmg = dmg;
     }
+
     public void setMultiplier(int multiplier){
         this.multiplier = multiplier;
     }
@@ -28,10 +27,6 @@ public class Characters {
     }
 
     public int getDmg() {
-        return dmg;
-    }
-
-    public int getMultiplier() {
-        return multiplier;
+        return dmg * multiplier;
     }
 }
