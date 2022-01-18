@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -90,7 +91,7 @@ public class Round extends AppCompatActivity {
         enemies[enemyIndex].setHp(hp);
         enemyHp.setProgress(hp);
         if(hp <= 0){
-            Handler handler = new Handler();
+            Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(() -> {
                 try{
                     enemyIndex++;
@@ -109,7 +110,7 @@ public class Round extends AppCompatActivity {
         myHp.setProgress(hp);
         if(hp <= 0){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Game over! You lose!"), Toast.LENGTH_LONG).show();
-            Handler handler = new Handler();
+            Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(() -> {
                 Intent home = new Intent(Round.this, HomeActivity.class);
                 sharedPreference.setData("savedInfo", "round", "1");
@@ -120,7 +121,7 @@ public class Round extends AppCompatActivity {
     }
     public void determineWinner(int youWeapon){
         Random rand = new Random();
-        Handler handler = new Handler();
+        Handler handler = new Handler(Looper.getMainLooper());
         int index = rand.nextInt(3);
         enemyWeapon.setImageResource(enemyWeapons[index]);
         yourWeapon.setImageResource(youWeapon);
