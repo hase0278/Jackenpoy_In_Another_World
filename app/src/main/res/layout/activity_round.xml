@@ -52,11 +52,13 @@
         android:id="@+id/hpContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="7dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/hpGuide"
+        app:layout_constraintBottom_toTopOf="@+id/enemyWeapon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/hpGuide2">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ProgressBar
             android:id="@+id/playerHp"
@@ -96,12 +98,82 @@
         app:srcCompat="@drawable/mainchar" />
 
     <ImageView
+        android:id="@+id/enemyWeapon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="123dp"
+        android:layout_marginBottom="293dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/yourWeapon"
+        app:layout_constraintTop_toBottomOf="@+id/hpContainer"
+        app:srcCompat="@drawable/rock" />
+
+    <ImageView
         android:id="@+id/enemyImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="204dp"
+        android:contentDescription="@string/todo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hpContainer"
-        app:srcCompat="@drawable/demongeneral1_human"
-        android:contentDescription="@string/todo" />
+        app:srcCompat="@drawable/demongeneral1_human" />
+
+    <ImageView
+        android:id="@+id/yourWeapon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="174dp"
+        android:layout_marginEnd="256dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="@+id/enemyWeapon"
+        app:layout_constraintEnd_toStartOf="@+id/enemyWeapon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/enemyWeapon"
+        app:srcCompat="@drawable/rock" />
+
+    <LinearLayout
+        android:id="@+id/weaponsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/chooseWeaponLbl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/choose_your_weapon"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/rock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/rock" />
+
+            <ImageView
+                android:id="@+id/paper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/paper" />
+
+            <ImageView
+                android:id="@+id/scissors"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/scissors" />
+        </LinearLayout>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

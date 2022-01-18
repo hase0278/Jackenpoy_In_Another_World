@@ -18,6 +18,10 @@ public class SharedPreferenceAccessor {
         SharedPreferences prefs = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
         return prefs.getString(key,"");
     }
+    public boolean doesKeyExist(String preferenceName, String key){
+        SharedPreferences prefs = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
+        return prefs.contains(key);
+    }
     public void clearData(String preferenceName){
         SharedPreferences prefs = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit().clear();

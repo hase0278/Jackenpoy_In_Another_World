@@ -5,6 +5,7 @@ public class Characters implements Character{
     protected int characterImg;
     protected int dmg;
     protected int multiplier;
+    public String charName;
 
     public void setHp(int hp){
         this.hp = hp;
