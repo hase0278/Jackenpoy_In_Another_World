@@ -8,6 +8,13 @@
     android:background="@drawable/background_1"
     tools:context=".Round">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/enemyGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.27" />
+
     <TextView
         android:id="@+id/yourHpLbl"
         android:layout_width="wrap_content"
@@ -53,9 +60,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="25dp"
-        android:layout_marginBottom="7dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/enemyWeapon"
+        app:layout_constraintBottom_toTopOf="@+id/hpGuide"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -64,19 +70,21 @@
             android:id="@+id/playerHp"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="2dp"
-            android:paddingEnd="4dp" />
+            android:paddingEnd="4dp"
+            android:progressDrawable="@drawable/hp_bar" />
 
         <ProgressBar
             android:id="@+id/enemyHp"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="4dp"
-            android:paddingEnd="2dp" />
+            android:paddingEnd="2dp"
+            android:progressDrawable="@drawable/hp_bar" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -90,48 +98,19 @@
         android:id="@+id/yourCharImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="152dp"
         android:contentDescription="@string/todo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hpContainer"
+        app:layout_constraintEnd_toStartOf="@+id/yourGuide"
+        app:layout_constraintTop_toTopOf="@+id/hpGuide"
         app:srcCompat="@drawable/mainchar" />
-
-    <ImageView
-        android:id="@+id/enemyWeapon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="123dp"
-        android:layout_marginBottom="293dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/yourWeapon"
-        app:layout_constraintTop_toBottomOf="@+id/hpContainer"
-        app:srcCompat="@drawable/rock" />
 
     <ImageView
         android:id="@+id/enemyImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="204dp"
         android:contentDescription="@string/todo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hpContainer"
+        app:layout_constraintStart_toStartOf="@+id/enemyGuide"
+        app:layout_constraintTop_toBottomOf="@+id/enemyHpLbl"
         app:srcCompat="@drawable/demongeneral1_human" />
-
-    <ImageView
-        android:id="@+id/yourWeapon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="174dp"
-        android:layout_marginEnd="256dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintBottom_toBottomOf="@+id/enemyWeapon"
-        app:layout_constraintEnd_toStartOf="@+id/enemyWeapon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/enemyWeapon"
-        app:srcCompat="@drawable/rock" />
 
     <LinearLayout
         android:id="@+id/weaponsContainer"
@@ -160,20 +139,49 @@
                 android:id="@+id/rock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/todo"
+                app:srcCompat="@drawable/rock" />
+
+            <ImageView
+                android:id="@+id/yourWeap"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/todo"
+
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/rock" />
 
             <ImageView
                 android:id="@+id/paper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/todo"
                 app:srcCompat="@drawable/paper" />
+
+            <ImageView
+                android:id="@+id/enemyWeap"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="@string/todo"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/rock" />
 
             <ImageView
                 android:id="@+id/scissors"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/todo"
                 app:srcCompat="@drawable/scissors" />
         </LinearLayout>
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/yourGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.78" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

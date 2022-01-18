@@ -2,39 +2,55 @@ package com.decastrofinalproject.jackenpoyinanotherworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.decastrofinalproject.jackenpoyinanotherworld.characters.Character;
 import com.decastrofinalproject.jackenpoyinanotherworld.characters.CharacterRoles;
 import com.decastrofinalproject.jackenpoyinanotherworld.characters.Characters;
 import com.decastrofinalproject.jackenpoyinanotherworld.characters.Mobs;
 import com.decastrofinalproject.jackenpoyinanotherworld.characters.You;
 
+import java.util.Random;
+
 public class Round extends AppCompatActivity {
     private Characters character;
     private Characters[] enemies;
     private int enemyIndex;
+    private int[] enemyWeapons = {R.drawable.rock, R.drawable.paper, R.drawable.scissors};
     private TextView enemyName;
-    ImageView enemyImage;
-    ProgressBar myHp;
-    ProgressBar enemyHp;
+    private ImageView enemyImage;
+    private ImageView yourWeapon;
+    private ImageView enemyWeapon;
+    private ImageView rock;
+    ImageView paper;
+    ImageView scissors;
+    private LinearLayout weaponsContainer;
+    private ProgressBar myHp;
+    private ProgressBar enemyHp;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_round);
 
         SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
-        int round = Integer.valueOf(sharedPreference.getData("savedInfo", "round"));
+        int round = Integer.parseInt(sharedPreference.getData("savedInfo", "round"));
         String side = sharedPreference.getData("savedInfo", "side");
         CharacterRoles characterRoles = new CharacterRoles(side);
         enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
         enemyIndex = 0;
         character = new You(side, round);
+        enemyName = findViewById(R.id.enemyHpLbl);
+        enemyImage = findViewById(R.id.enemyImg);
         enemyHp = findViewById(R.id.enemyHp);
         myHp = findViewById(R.id.playerHp);
         myHp.setMax(character.getHp());
@@ -49,32 +65,81 @@ public class Round extends AppCompatActivity {
 
         TextView roundLabel = findViewById(R.id.roundLbl);
         roundLabel.setText("Round " + round);
-        enemyName = findViewById(R.id.enemyHpLbl);
-        enemyImage = findViewById(R.id.enemyImg);
-        enemyImage.setImageResource(enemies[enemyIndex].getCharacterImg());
-        enemyName.setText(enemies[enemyIndex].getName());
-        ImageView yourWeapon = findViewById(R.id.yourWeapon);
-        ImageView enemyWeapon = findViewById(R.id.enemyWeapon);
-        LinearLayout weaponsContainer = findViewById(R.id.weaponsContainer);
-        weaponsContainer.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                if(i == View.VISIBLE){
-                    yourWeapon.setVisibility(View.GONE);
-                    enemyWeapon.setVisibility(View.GONE);
-                }
-                else if(i == View.INVISIBLE || i == View.GONE){
-                    yourWeapon.setVisibility(View.VISIBLE);
-                    enemyWeapon.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+
+        yourWeapon = findViewById(R.id.yourWeap);
+        enemyWeapon = findViewById(R.id.enemyWeap);
+        weaponsContainer = findViewById(R.id.weaponsContainer);
+        rock = findViewById(R.id.rock);
+        rock.setOnClickListener(view -> determineWinner(R.drawable.rock));
+        paper = findViewById(R.id.paper);
+        paper.setOnClickListener(view -> determineWinner(R.drawable.paper));
+        scissors = findViewById(R.id.scissors);
+        scissors.setOnClickListener(view -> determineWinner(R.drawable.scissors));
+        setWeaponsVisibility(View.VISIBLE, View.GONE);
     }
     public void setEnemyMaxHp(int maxHp){
         enemyHp.setMax(maxHp);
         enemyHp.setProgress(maxHp);
+        enemyImage.setImageResource(enemies[enemyIndex].getCharacterImg());
+        enemyName.setText(enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)));
     }
     public void setEnemyHpNow(int hp){
+        enemies[enemyIndex].setHp(hp);
         enemyHp.setProgress(hp);
+        if(hp <= 0){
+            enemyIndex++;
+        }
+    }
+    public void setMyHpNow(int hp){
+        character.setHp(hp);
+        myHp.setProgress(hp);
+        if(hp <= 0){
+            Toast.makeText(getApplicationContext(), CenteredToast.centerText("Game over! You lose!"), Toast.LENGTH_LONG).show();
+            Intent home = new Intent(Round.this, HomeActivity.class);
+            SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
+            sharedPreference.setData("savedInfo", "round", "1");
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(home);
+        }
+    }
+    public void determineWinner(int youWeapon){
+        Random rand = new Random();
+        Handler handler = new Handler();
+        int index = rand.nextInt(3);
+        enemyWeapon.setImageResource(enemyWeapons[index]);
+        yourWeapon.setImageResource(youWeapon);
+        Log.d("Your Damage", String.valueOf(character.getDmg()));
+        Log.d("Enemy Damage", String.valueOf(enemies[enemyIndex].getDmg()));
+        setWeaponsVisibility(View.GONE, View.VISIBLE);
+        if(youWeapon == enemyWeapons[index]){
+            Toast.makeText(getApplicationContext(), CenteredToast.centerText("Both weapons repelled. No damage received."), Toast.LENGTH_SHORT).show();
+        }
+        else if(((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.paper)) || ((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.rock)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.scissors))){
+            Toast.makeText(getApplicationContext(), CenteredToast.centerText("You repelled " + enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)).toLowerCase() +"'s weapon."), Toast.LENGTH_SHORT).show();
+            handler.postDelayed(() -> {
+                // Do something after 5s = 5000ms
+                setEnemyHpNow(enemies[enemyIndex].getHp() - character.getDmg());
+            }, 1000);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), CenteredToast.centerText(enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)) +" repelled your weapon."), Toast.LENGTH_SHORT).show();
+            handler.postDelayed(() -> {
+                // Do something after 5s = 5000ms
+                setMyHpNow(character.getHp() - enemies[enemyIndex].getDmg());
+            }, 1000);
+        }
+        handler.postDelayed(() -> {
+            // Do something after 5s = 5000ms
+            setWeaponsVisibility(View.VISIBLE, View.GONE);
+        }, 3000);
+    }
+    public void setWeaponsVisibility(int visibility, int visibility2){
+        TextView weaponsLbl = findViewById(R.id.chooseWeaponLbl);
+        weaponsLbl.setVisibility(visibility);
+        rock.setVisibility(visibility);
+        paper.setVisibility(visibility);
+        scissors.setVisibility(visibility);
+        yourWeapon.setVisibility(visibility2);
+        enemyWeapon.setVisibility(visibility2);
     }
 }
