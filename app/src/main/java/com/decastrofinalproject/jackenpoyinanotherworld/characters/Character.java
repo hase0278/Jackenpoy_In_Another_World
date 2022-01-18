@@ -12,4 +12,6 @@ public interface Character {
     int getCharacterImg();
 
     int getDmg();
+
+    String getName();
 }
