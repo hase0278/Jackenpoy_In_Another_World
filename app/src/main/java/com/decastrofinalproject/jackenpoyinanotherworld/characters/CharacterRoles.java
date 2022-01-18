@@ -23,13 +23,15 @@ public class CharacterRoles {
 
     public Character getEnemyGeneralForThisRound(int round){
         enemyGenerals[round - 1].setHp(100 * round);
-        enemyGenerals[round - 1].setDmg(50 * round);
+        enemyGenerals[round - 1].setDmg(50);
+        enemyGenerals[round - 1].setMultiplier(round);
         return enemyGenerals[round - 1];
     }
 
     public Character getEnemyLeader(){
         enemyLeader.setDmg(1000);
-        enemyLeader.setHp(1000);
+        enemyLeader.setMultiplier(1);
+        enemyLeader.setHp(2000);
         return enemyLeader;
     }
 
