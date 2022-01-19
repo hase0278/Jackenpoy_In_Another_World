@@ -15,6 +15,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        SoundPlayer player = new SoundPlayer(getApplicationContext(), true, R.raw.homesound);
+        player.play();
         SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
         if(!sharedPreference.doesKeyExist("savedInfo", "side")){
             Log.d("side", "side");
@@ -22,13 +24,11 @@ public class HomeActivity extends AppCompatActivity {
             sharedPreference.setData("savedInfo", "round", "1");
         }
         LinearLayout home = findViewById(R.id.homeContainer);
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent round = new Intent(HomeActivity.this, Round.class);
-                round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(round);
-            }
+        home.setOnClickListener(view -> {
+            Intent round = new Intent(HomeActivity.this, Round.class);
+            round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            player.stop();
+            startActivity(round);
         });
     }
 }
