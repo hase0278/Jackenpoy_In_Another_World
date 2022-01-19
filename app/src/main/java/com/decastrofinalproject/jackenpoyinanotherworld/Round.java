@@ -100,14 +100,14 @@ public class Round extends AppCompatActivity {
     public void setEnemyMaxHp(int maxHp){
         enemyHp.setMax(maxHp);
         enemyHp.setProgress(maxHp);
-        enemyHpRemaining.setText(String.valueOf(maxHp));
+        enemyHpRemaining.setText(maxHp > 0?String.valueOf(maxHp):String.valueOf(0));
         enemyImage.setImageResource(enemies[enemyIndex].getCharacterImg());
         enemyName.setText(enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)));
     }
     public void setEnemyHpNow(int hp){
         enemies[enemyIndex].setHp(hp);
         enemyHp.setProgress(hp);
-        enemyHpRemaining.setText(String.valueOf(hp));
+        enemyHpRemaining.setText(hp > 0?String.valueOf(hp):String.valueOf(0));
         if(hp <= 0){
             Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(() -> {
@@ -126,12 +126,12 @@ public class Round extends AppCompatActivity {
     public void setMyMaxHp(int maxHp){
         myHp.setMax(maxHp);
         myHp.setProgress(maxHp);
-        playerHpRemaining.setText(String.valueOf(maxHp));
+        playerHpRemaining.setText(maxHp > 0?String.valueOf(maxHp):String.valueOf(0));
     }
     public void setMyHpNow(int hp){
         character.setHp(hp);
         myHp.setProgress(hp);
-        playerHpRemaining.setText(String.valueOf(hp));
+        playerHpRemaining.setText(hp > 0?String.valueOf(hp):String.valueOf(0));
         if(hp <= 0){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Game over! You lose!"), Toast.LENGTH_LONG).show();
             Handler handler = new Handler(Looper.getMainLooper());
