@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -40,6 +39,7 @@ public class Round extends AppCompatActivity {
     ImageView scissors;
     private ProgressBar myHp;
     private ProgressBar enemyHp;
+    private SoundPlayer soundEffects;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,12 +144,14 @@ public class Round extends AppCompatActivity {
         }
     }
     public void determineWinner(int youWeapon){
+        soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
         Random rand = new Random();
         Handler handler = new Handler(Looper.getMainLooper());
         int index = rand.nextInt(3);
         enemyWeapon.setImageResource(enemyWeapons[index]);
         yourWeapon.setImageResource(youWeapon);
         setWeaponsVisibility(View.GONE, View.VISIBLE);
+        soundEffects.play();
         if(((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.paper_enemy)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.rock_enemy)) || ((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.scissors_enemy))){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Both weapons repelled. No damage received."), Toast.LENGTH_SHORT).show();
         }
