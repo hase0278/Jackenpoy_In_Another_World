@@ -20,6 +20,8 @@ import com.decastrofinalproject.jackenpoyinanotherworld.characters.Mobs;
 import com.decastrofinalproject.jackenpoyinanotherworld.characters.You;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Round extends AppCompatActivity {
     private Characters character;
@@ -40,6 +42,7 @@ public class Round extends AppCompatActivity {
     private ProgressBar myHp;
     private ProgressBar enemyHp;
     private SoundPlayer soundEffects;
+    private SoundPlayer bg;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,9 @@ public class Round extends AppCompatActivity {
         round = Integer.parseInt(sharedPreference.getData("savedInfo", "round"));
         ConstraintLayout background = findViewById(R.id.roundBackGround);
         String side = sharedPreference.getData("savedInfo", "side");
+        soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
         if(round == 10){
+            bg = new SoundPlayer(getApplicationContext(), true, R.raw.bgtwo);
             if(side.equals("humans")){
                 background.setBackgroundResource(R.drawable.castle_demon);
             }
@@ -59,11 +64,14 @@ public class Round extends AppCompatActivity {
             }
         }
         else if(round < 5){
+            bg = new SoundPlayer(getApplicationContext(), true, R.raw.bgone);
             background.setBackgroundResource(R.drawable.background_1);
         }
         else{
+            bg = new SoundPlayer(getApplicationContext(), true, R.raw.bgtwo);
             background.setBackgroundResource(R.drawable.background_2);
         }
+        bg.play();
         CharacterRoles characterRoles = new CharacterRoles(side);
         enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
         enemyIndex = 0;
@@ -97,6 +105,22 @@ public class Round extends AppCompatActivity {
         scissors.setOnClickListener(view -> determineWinner(R.drawable.scissors));
         setWeaponsVisibility(View.VISIBLE, View.GONE);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        soundEffects.stop();
+        soundEffects = null;
+        bg.pause();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
+        bg.play();
+    }
+
     public void setEnemyMaxHp(int maxHp){
         enemyHp.setMax(maxHp);
         enemyHp.setProgress(maxHp);
@@ -113,6 +137,23 @@ public class Round extends AppCompatActivity {
             handler.postDelayed(() -> {
                 try{
                     enemyIndex++;
+                    if(enemyIndex > 8){
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        if(enemies[enemyIndex].getName().contains("Leader") || enemies[enemyIndex].getName().contains("Demon Lord")){
+                            bg.stop();
+                            executor.execute(() -> {
+                                bg = new SoundPlayer(getApplicationContext(), true, R.raw.leaderfight);
+                                handler.post(() -> bg.play());
+                            });
+                        }
+                        else if(enemies[enemyIndex].getName().contains("General")){
+                            bg.stop();
+                            executor.execute(() -> {
+                                bg = new SoundPlayer(getApplicationContext(), true, R.raw.generalfight);
+                                handler.post(() -> bg.play());
+                            });
+                        }
+                    }
                     setEnemyMaxHp(enemies[enemyIndex].getHp());
                 }
                 catch (ArrayIndexOutOfBoundsException e){
@@ -144,7 +185,6 @@ public class Round extends AppCompatActivity {
         }
     }
     public void determineWinner(int youWeapon){
-        soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
         Random rand = new Random();
         Handler handler = new Handler(Looper.getMainLooper());
         int index = rand.nextInt(3);

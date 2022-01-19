@@ -4,7 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 
 public class SoundPlayer {
-    private MediaPlayer mPlayer;
+    private final MediaPlayer mPlayer;
     public SoundPlayer(Context context, boolean isLooped, int music_id){
         mPlayer = MediaPlayer.create(context, music_id);
         mPlayer.setLooping(isLooped);
