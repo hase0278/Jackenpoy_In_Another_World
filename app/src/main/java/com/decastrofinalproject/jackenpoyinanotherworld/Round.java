@@ -1,6 +1,7 @@
 package com.decastrofinalproject.jackenpoyinanotherworld;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,7 +11,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,15 +28,16 @@ public class Round extends AppCompatActivity {
     private SharedPreferenceAccessor sharedPreference;
     private int enemyIndex;
     private int round;
-    private int[] enemyWeapons = {R.drawable.rock_enemy, R.drawable.paper_enemy, R.drawable.scissors_enemy};
+    private final int[] enemyWeapons = {R.drawable.rock_enemy, R.drawable.paper_enemy, R.drawable.scissors_enemy};
     private TextView enemyName;
+    private TextView enemyHpRemaining;
+    private TextView playerHpRemaining;
     private ImageView enemyImage;
     private ImageView yourWeapon;
     private ImageView enemyWeapon;
     private ImageView rock;
     ImageView paper;
     ImageView scissors;
-    private LinearLayout weaponsContainer;
     private ProgressBar myHp;
     private ProgressBar enemyHp;
     @SuppressLint("SetTextI18n")
@@ -47,7 +48,22 @@ public class Round extends AppCompatActivity {
 
         sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
         round = Integer.parseInt(sharedPreference.getData("savedInfo", "round"));
+        ConstraintLayout background = findViewById(R.id.roundBackGround);
         String side = sharedPreference.getData("savedInfo", "side");
+        if(round == 10){
+            if(side.equals("humans")){
+                background.setBackgroundResource(R.drawable.castle_demon);
+            }
+            else{
+                background.setBackgroundResource(R.drawable.castle_human);
+            }
+        }
+        else if(round < 5){
+            background.setBackgroundResource(R.drawable.background_1);
+        }
+        else{
+            background.setBackgroundResource(R.drawable.background_2);
+        }
         CharacterRoles characterRoles = new CharacterRoles(side);
         enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
         enemyIndex = 0;
@@ -55,9 +71,10 @@ public class Round extends AppCompatActivity {
         enemyName = findViewById(R.id.enemyHpLbl);
         enemyImage = findViewById(R.id.enemyImg);
         enemyHp = findViewById(R.id.enemyHp);
+        enemyHpRemaining = findViewById(R.id.enemyRemainingHp);
         myHp = findViewById(R.id.playerHp);
-        myHp.setMax(character.getHp());
-        myHp.setProgress(character.getHp());
+        playerHpRemaining = findViewById(R.id.playerRemainingHp);
+        setMyMaxHp(character.getHp());
         try{
             setEnemyMaxHp(enemies[enemyIndex].getHp());
         }
@@ -72,7 +89,6 @@ public class Round extends AppCompatActivity {
 
         yourWeapon = findViewById(R.id.yourWeap);
         enemyWeapon = findViewById(R.id.enemyWeap);
-        weaponsContainer = findViewById(R.id.weaponsContainer);
         rock = findViewById(R.id.rock);
         rock.setOnClickListener(view -> determineWinner(R.drawable.rock));
         paper = findViewById(R.id.paper);
@@ -84,12 +100,14 @@ public class Round extends AppCompatActivity {
     public void setEnemyMaxHp(int maxHp){
         enemyHp.setMax(maxHp);
         enemyHp.setProgress(maxHp);
+        enemyHpRemaining.setText(String.valueOf(maxHp));
         enemyImage.setImageResource(enemies[enemyIndex].getCharacterImg());
         enemyName.setText(enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)));
     }
     public void setEnemyHpNow(int hp){
         enemies[enemyIndex].setHp(hp);
         enemyHp.setProgress(hp);
+        enemyHpRemaining.setText(String.valueOf(hp));
         if(hp <= 0){
             Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(() -> {
@@ -105,9 +123,15 @@ public class Round extends AppCompatActivity {
 
         }
     }
+    public void setMyMaxHp(int maxHp){
+        myHp.setMax(maxHp);
+        myHp.setProgress(maxHp);
+        playerHpRemaining.setText(String.valueOf(maxHp));
+    }
     public void setMyHpNow(int hp){
         character.setHp(hp);
         myHp.setProgress(hp);
+        playerHpRemaining.setText(String.valueOf(hp));
         if(hp <= 0){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Game over! You lose!"), Toast.LENGTH_LONG).show();
             Handler handler = new Handler(Looper.getMainLooper());
@@ -126,7 +150,9 @@ public class Round extends AppCompatActivity {
         enemyWeapon.setImageResource(enemyWeapons[index]);
         yourWeapon.setImageResource(youWeapon);
         Log.d("Your Damage", String.valueOf(character.getDmg()));
+        Log.d("Your HP", String.valueOf(character.getHp()));
         Log.d("Enemy Damage", String.valueOf(enemies[enemyIndex].getDmg()));
+        Log.d("Enemy HP", String.valueOf(enemies[index].getHp()));
         setWeaponsVisibility(View.GONE, View.VISIBLE);
         if(((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.paper_enemy)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.rock_enemy)) || ((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.scissors_enemy))){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Both weapons repelled. No damage received."), Toast.LENGTH_SHORT).show();

@@ -9,6 +9,13 @@
     tools:context=".Round">
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/hpGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.14" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/enemyGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,35 +73,72 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="25dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/hpGuide"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
-            android:id="@+id/playerHp"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="2dp"
-            android:paddingEnd="4dp"
-            android:progressDrawable="@drawable/hp_bar" />
+            android:paddingEnd="4dp">
 
-        <ProgressBar
-            android:id="@+id/enemyHp"
-            style="?android:attr/progressBarStyleHorizontal"
+            <ProgressBar
+                android:id="@+id/playerHp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foregroundGravity="center"
+                android:progressDrawable="@drawable/hp_bar" />
+
+            <TextView
+                android:id="@+id/playerRemainingHp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/hp"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="4dp"
-            android:paddingEnd="2dp"
-            android:progressDrawable="@drawable/hp_bar" />
+            android:paddingStart="2dp"
+            android:paddingEnd="4dp">
+
+            <ProgressBar
+                android:id="@+id/enemyHp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foregroundGravity="center"
+                android:progressDrawable="@drawable/hp_bar" />
+
+            <TextView
+                android:id="@+id/enemyRemainingHp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/hp"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </RelativeLayout>
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/hpGuide"
+        android:id="@+id/playerGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -106,7 +150,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toStartOf="@+id/yourGuide"
-        app:layout_constraintTop_toTopOf="@+id/hpGuide"
+        app:layout_constraintTop_toTopOf="@+id/playerGuide"
         app:srcCompat="@drawable/mainchar" />
 
     <ImageView

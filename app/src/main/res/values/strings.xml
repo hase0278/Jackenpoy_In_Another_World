@@ -7,4 +7,5 @@
     <string name="todo">TODO</string>
     <string name="choose_your_weapon">Choose Your Weapon</string>
     <string name="vs">VS</string>
+    <string name="hp">HP</string>
 </resources>
