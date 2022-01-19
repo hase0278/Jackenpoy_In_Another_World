@@ -73,7 +73,12 @@ public class Round extends AppCompatActivity {
         }
         bg.play();
         CharacterRoles characterRoles = new CharacterRoles(side);
-        enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
+        if(round == 10){
+            enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round), characterRoles.getEnemyLeader()};
+        }
+        else{
+            enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
+        }
         enemyIndex = 0;
         character = new You(side, round);
         enemyName = findViewById(R.id.enemyHpLbl);
@@ -137,7 +142,7 @@ public class Round extends AppCompatActivity {
             handler.postDelayed(() -> {
                 try{
                     enemyIndex++;
-                    if(enemyIndex > 8){
+                    if(enemyIndex > 7){
                         ExecutorService executor = Executors.newSingleThreadExecutor();
                         if(enemies[enemyIndex].getName().contains("Leader") || enemies[enemyIndex].getName().contains("Demon Lord")){
                             bg.stop();

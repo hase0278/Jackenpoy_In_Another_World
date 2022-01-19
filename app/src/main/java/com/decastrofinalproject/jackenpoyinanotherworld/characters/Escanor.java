@@ -5,6 +5,6 @@ import com.decastrofinalproject.jackenpoyinanotherworld.R;
 public class Escanor extends Characters {
     public Escanor(String side){
         this.characterImg = side.equals("human")?R.drawable.escanor_human:R.drawable.escanor_demon;
-        this.charName = "Escanor(Beastman)(General/Vice Leader)";
+        this.charName = "Escanor(Beastman)(General)";
     }
 }
