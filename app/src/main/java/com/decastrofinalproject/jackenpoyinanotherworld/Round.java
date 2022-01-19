@@ -28,7 +28,7 @@ public class Round extends AppCompatActivity {
     private SharedPreferenceAccessor sharedPreference;
     private int enemyIndex;
     private int round;
-    private int[] enemyWeapons = {R.drawable.rock, R.drawable.paper, R.drawable.scissors};
+    private int[] enemyWeapons = {R.drawable.rock_enemy, R.drawable.paper_enemy, R.drawable.scissors_enemy};
     private TextView enemyName;
     private ImageView enemyImage;
     private ImageView yourWeapon;
@@ -128,10 +128,10 @@ public class Round extends AppCompatActivity {
         Log.d("Your Damage", String.valueOf(character.getDmg()));
         Log.d("Enemy Damage", String.valueOf(enemies[enemyIndex].getDmg()));
         setWeaponsVisibility(View.GONE, View.VISIBLE);
-        if(youWeapon == enemyWeapons[index]){
+        if(((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.paper_enemy)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.rock_enemy)) || ((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.scissors_enemy))){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Both weapons repelled. No damage received."), Toast.LENGTH_SHORT).show();
         }
-        else if(((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.paper)) || ((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.rock)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.scissors))){
+        else if(((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.paper_enemy)) || ((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.rock_enemy)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.scissors_enemy))){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("You repelled " + enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)).toLowerCase() +"'s weapon."), Toast.LENGTH_SHORT).show();
             handler.postDelayed(() -> {
                 // Do something after 5s = 5000ms
@@ -152,12 +152,14 @@ public class Round extends AppCompatActivity {
     }
     public void setWeaponsVisibility(int visibility, int visibility2){
         TextView weaponsLbl = findViewById(R.id.chooseWeaponLbl);
+        TextView vsLbl = findViewById(R.id.vsLbl);
         weaponsLbl.setVisibility(visibility);
         rock.setVisibility(visibility);
         paper.setVisibility(visibility);
         scissors.setVisibility(visibility);
         yourWeapon.setVisibility(visibility2);
         enemyWeapon.setVisibility(visibility2);
+        vsLbl.setVisibility(visibility2);
     }
     public void refresh(){
         finish();

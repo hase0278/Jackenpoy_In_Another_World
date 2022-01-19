@@ -23,6 +23,8 @@
         android:paddingEnd="2dp"
         android:text="@string/you"
         android:textColor="#DCEDC8"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/hpGuide2"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -34,6 +36,8 @@
         android:paddingEnd="4dp"
         android:text="@string/enemy_name"
         android:textColor="#EFEBE9"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/hpGuide2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,6 +48,8 @@
         android:layout_height="wrap_content"
         android:text="@string/round_x"
         android:textColor="#E0E0E0"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/hpGuide2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -128,7 +134,8 @@
             android:gravity="center_horizontal"
             android:text="@string/choose_your_weapon"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -152,6 +159,16 @@
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/rock" />
 
+            <TextView
+                android:id="@+id/vsLbl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/vs"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <ImageView
                 android:id="@+id/paper"
                 android:layout_width="wrap_content"
@@ -173,7 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/todo"
-                app:srcCompat="@drawable/scissors" />
+                app:srcCompat="@drawable/scissors_enemy" />
         </LinearLayout>
     </LinearLayout>
 
