@@ -79,7 +79,7 @@ public class Round extends AppCompatActivity {
         else{
             enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
         }
-        enemyIndex = 8;
+        enemyIndex = 0;
         character = new You(side, round);
         enemyName = findViewById(R.id.enemyHpLbl);
         enemyImage = findViewById(R.id.enemyImg);
