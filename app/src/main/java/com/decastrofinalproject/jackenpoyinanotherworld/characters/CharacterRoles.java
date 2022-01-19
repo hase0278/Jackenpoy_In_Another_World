@@ -7,10 +7,10 @@ public class CharacterRoles {
     private Characters allyLeader;
 
     public CharacterRoles(String side) {
-        enemyLeader = side.equals("humans")?new Zeldris(side):new Ludociel(side);
-        allyLeader = side.equals("humans")?new Ludociel(side):new Zeldris(side);
-        enemyGenerals = side.equals("humans")?new Characters[]{new Cain(side), new Dullahan(side), new Shisandan(), new Ares(side), new Charlatan(side), new Ruthven(side), new Derieri(side), new Merlin(side), new Igzdukyz(side), new LaBete(side)}: new Characters[]{new Guila(side), new Dreyfus(side), new Hendrickson(side), new Matrona(side), new Dianne(side), new King(side), new Elaine(side), new Vaizel(side), new Elizabeth(side), new Escanor(side)};
-        allyGenerals = side.equals("humans")?new Characters[]{new Guila(side), new Dreyfus(side), new Hendrickson(side), new Matrona(side), new Dianne(side), new King(side), new Elaine(side), new Vaizel(side), new Elizabeth(side), new Escanor(side)}: new Characters[]{new Cain(side), new Dullahan(side), new Shisandan(), new Ares(side), new Charlatan(side), new Ruthven(side), new Derieri(side), new Merlin(side), new Igzdukyz(side), new LaBete(side)};
+        enemyLeader = side.equals("human")?new Zeldris(side):new Ludociel(side);
+        allyLeader = side.equals("human")?new Ludociel(side):new Zeldris(side);
+        enemyGenerals = side.equals("human")?new Characters[]{new Cain(side), new Dullahan(side), new Shisandan(), new Ares(side), new Charlatan(side), new Ruthven(side), new Derieri(side), new Merlin(side), new Igzdukyz(side), new LaBete(side)}: new Characters[]{new Guila(side), new Dreyfus(side), new Hendrickson(side), new Matrona(side), new Dianne(side), new King(side), new Elaine(side), new Vaizel(side), new Elizabeth(side), new Escanor(side)};
+        allyGenerals = side.equals("human")?new Characters[]{new Guila(side), new Dreyfus(side), new Hendrickson(side), new Matrona(side), new Dianne(side), new King(side), new Elaine(side), new Vaizel(side), new Elizabeth(side), new Escanor(side)}: new Characters[]{new Cain(side), new Dullahan(side), new Shisandan(), new Ares(side), new Charlatan(side), new Ruthven(side), new Derieri(side), new Merlin(side), new Igzdukyz(side), new LaBete(side)};
     }
 
     public Characters[] getAllyGenerals(){

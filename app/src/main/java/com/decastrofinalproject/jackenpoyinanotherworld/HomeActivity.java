@@ -26,9 +26,10 @@ public class HomeActivity extends AppCompatActivity {
             handler.post(() -> player.play());
         });
         SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
+        sharedPreference.setData("savedInfo", "round", "10");
         if(!sharedPreference.doesKeyExist("savedInfo", "side")){
             Log.d("side", "side");
-            sharedPreference.setData("savedInfo", "side", "humans");
+            sharedPreference.setData("savedInfo", "side", "human");
             sharedPreference.setData("savedInfo", "round", "1");
         }
         LinearLayout home = findViewById(R.id.homeContainer);

@@ -56,7 +56,7 @@ public class Round extends AppCompatActivity {
         soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
         if(round == 10){
             bg = new SoundPlayer(getApplicationContext(), true, R.raw.bgtwo);
-            if(side.equals("humans")){
+            if(side.equals("human")){
                 background.setBackgroundResource(R.drawable.castle_demon);
             }
             else{
@@ -79,7 +79,7 @@ public class Round extends AppCompatActivity {
         else{
             enemies = new Characters[]{new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), new Mobs(side, round), characterRoles.getEnemyGeneralForThisRound(round)};
         }
-        enemyIndex = 0;
+        enemyIndex = 8;
         character = new You(side, round);
         enemyName = findViewById(R.id.enemyHpLbl);
         enemyImage = findViewById(R.id.enemyImg);
