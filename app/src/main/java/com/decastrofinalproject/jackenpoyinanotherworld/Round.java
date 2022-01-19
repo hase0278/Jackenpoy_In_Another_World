@@ -149,10 +149,6 @@ public class Round extends AppCompatActivity {
         int index = rand.nextInt(3);
         enemyWeapon.setImageResource(enemyWeapons[index]);
         yourWeapon.setImageResource(youWeapon);
-        Log.d("Your Damage", String.valueOf(character.getDmg()));
-        Log.d("Your HP", String.valueOf(character.getHp()));
-        Log.d("Enemy Damage", String.valueOf(enemies[enemyIndex].getDmg()));
-        Log.d("Enemy HP", String.valueOf(enemies[index].getHp()));
         setWeaponsVisibility(View.GONE, View.VISIBLE);
         if(((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.paper_enemy)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.rock_enemy)) || ((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.scissors_enemy))){
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Both weapons repelled. No damage received."), Toast.LENGTH_SHORT).show();
