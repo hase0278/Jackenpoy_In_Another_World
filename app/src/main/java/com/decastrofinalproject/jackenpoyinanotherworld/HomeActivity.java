@@ -20,7 +20,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         ExecutorService executor = Executors.newCachedThreadPool();
         Handler handler = new Handler(Looper.getMainLooper());
-
         executor.execute(() -> {
             player = new SoundPlayer(getApplicationContext(), true, R.raw.homesound);
             handler.post(() -> player.play());
@@ -30,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("side", "side");
             sharedPreference.setData("savedInfo", "side", "human");
             sharedPreference.setData("savedInfo", "round", "1");
+            sharedPreference.setData("savedInfo", "revive", "0");
         }
         LinearLayout home = findViewById(R.id.homeContainer);
         home.setOnClickListener(view -> {
