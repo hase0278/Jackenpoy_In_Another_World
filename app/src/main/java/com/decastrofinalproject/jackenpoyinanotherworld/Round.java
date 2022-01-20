@@ -210,6 +210,8 @@ public class Round extends AppCompatActivity {
             }
             else{
                 Toast.makeText(getApplicationContext(), "Revive chance used.", Toast.LENGTH_SHORT).show();
+                soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.revive);
+                soundEffects.play();
                 revive--;
                 sharedPreference.setData("savedInfo", "revive", String.valueOf(revive));
                 if(revive > 10){
@@ -221,6 +223,7 @@ public class Round extends AppCompatActivity {
                 if(revive - 10 > 0){
                     potions1_adapter.changeItemSize(revive - 10);
                 }
+                soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.repel);
                 character.setHp(1000);
                 setMyMaxHp(character.getHp());
             }
@@ -270,7 +273,11 @@ public class Round extends AppCompatActivity {
         int randomPots = random.nextInt(3);
         Log.d("randomPots", String.valueOf(randomPots));
         if(round == 10){
+            bg.stop();
+            soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.youwin);
+            soundEffects.play();
             AlertDiag.show(myHp.getContext(), R.drawable.win, "You win", "Go home", (dialogInterface, i) -> {
+                soundEffects.stop();
                 sharedPreference.clearData("savedInfo");
                 Intent home = new Intent(Round.this, HomeActivity.class);
                 home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -280,7 +287,10 @@ public class Round extends AppCompatActivity {
         else{
             sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
             if(randomPots > 0){
+                soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.divine);
+                soundEffects.play();
                 AlertDiag.show(myHp.getContext(), R.drawable.revive_notice, "You received " + randomPots + " revive potions.", "Ok", (dialogInterface, i) -> {
+                    soundEffects.stop();
                     sharedPreference.setData("savedInfo", "revive", String.valueOf(revive+randomPots));
                     refresh();
                 });
@@ -301,13 +311,11 @@ public class Round extends AppCompatActivity {
         potions_view = findViewById(R.id.potionsView);
         mLayoutManager = new LinearLayoutManager(potions_view.getContext(), LinearLayoutManager.HORIZONTAL, false);
         if(revive > 10){
-            Log.d("isEntered", String.valueOf(revive));
             potions_adapter = new PotionsAdapter(10);
             potions_view.setAdapter(potions_adapter);
             potions_view.setLayoutManager(mLayoutManager);
         }
         else{
-            Log.d("isEntered", String.valueOf(revive));
             potions_adapter = new PotionsAdapter(revive);
             potions_view.setAdapter(potions_adapter);
             potions_view.setLayoutManager(mLayoutManager);
