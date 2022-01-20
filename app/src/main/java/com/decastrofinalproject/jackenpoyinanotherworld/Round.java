@@ -2,13 +2,18 @@ package com.decastrofinalproject.jackenpoyinanotherworld;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,6 +34,13 @@ public class Round extends AppCompatActivity {
     private SharedPreferenceAccessor sharedPreference;
     private int enemyIndex;
     private int round;
+    private int revive;
+    protected RecyclerView potions_view;
+    protected RecyclerView potions_view1;
+    protected PotionsAdapter potions_adapter;
+    protected PotionsAdapter potions1_adapter;
+    protected RecyclerView.LayoutManager mLayoutManager;
+    protected RecyclerView.LayoutManager mLayoutManager1;
     private final int[] enemyWeapons = {R.drawable.rock_enemy, R.drawable.paper_enemy, R.drawable.scissors_enemy};
     private TextView enemyName;
     private TextView enemyHpRemaining;
@@ -48,9 +60,11 @@ public class Round extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_round);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
         round = Integer.parseInt(sharedPreference.getData("savedInfo", "round"));
+        updateRevive();
         ConstraintLayout background = findViewById(R.id.roundBackGround);
         String side = sharedPreference.getData("savedInfo", "side");
         soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
@@ -92,8 +106,7 @@ public class Round extends AppCompatActivity {
             setEnemyMaxHp(enemies[enemyIndex].getHp());
         }
         catch (ArrayIndexOutOfBoundsException e){
-            sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
-            refresh();
+            newRound();
         }
 
 
@@ -164,8 +177,7 @@ public class Round extends AppCompatActivity {
                     setEnemyMaxHp(enemies[enemyIndex].getHp());
                 }
                 catch (ArrayIndexOutOfBoundsException e){
-                    sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
-                    refresh();
+                    newRound();
                 }
             }, 1000);
 
@@ -181,19 +193,37 @@ public class Round extends AppCompatActivity {
         myHp.setProgress(hp);
         playerHpRemaining.setText(hp > 0?String.valueOf(hp):String.valueOf(0));
         if(hp <= 0){
-            bg.stop();
-            soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.youlose);
-            soundEffects.play();
-            AlertDiag.show(myHp.getContext(), R.drawable.lose, "You lose","Ok", (dialogInterface, i) -> {
-                soundEffects.stop();
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(() -> {
-                    Intent home = new Intent(Round.this, HomeActivity.class);
-                    sharedPreference.setData("savedInfo", "round", "1");
-                    home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(home);
-                }, 300);
-            });
+            if(revive < 1){
+                bg.stop();
+                soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.youlose);
+                soundEffects.play();
+                AlertDiag.show(myHp.getContext(), R.drawable.lose, "You lose","Ok", (dialogInterface, i) -> {
+                    soundEffects.stop();
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.postDelayed(() -> {
+                        Intent home = new Intent(Round.this, HomeActivity.class);
+                        sharedPreference.setData("savedInfo", "round", "1");
+                        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home);
+                    }, 300);
+                });
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Revive chance used.", Toast.LENGTH_SHORT).show();
+                revive--;
+                sharedPreference.setData("savedInfo", "revive", String.valueOf(revive));
+                if(revive > 10){
+                    potions_adapter.changeItemSize(10);
+                }
+                else{
+                    potions_adapter.changeItemSize(revive);
+                }
+                if(revive - 10 > 0){
+                    potions1_adapter.changeItemSize(revive - 10);
+                }
+                character.setHp(1000);
+                setMyMaxHp(character.getHp());
+            }
         }
     }
     public void determineWinner(int youWeapon){
@@ -237,10 +267,60 @@ public class Round extends AppCompatActivity {
         enemyWeapon.setVisibility(visibility2);
         vsLbl.setVisibility(visibility2);
     }
+    public void newRound(){
+        Random random = new Random();
+        int randomPots = random.nextInt(3);
+        Log.d("randomPots", String.valueOf(randomPots));
+        if(round == 10){
+            AlertDiag.show(myHp.getContext(), R.drawable.win, "You win", "Go home.", (dialogInterface, i) -> {
+                sharedPreference.setData("savedInfo", "revive", "0");
+                sharedPreference.setData("savedInfo", "round", "1");
+                Intent home = new Intent(Round.this, HomeActivity.class);
+                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(home);
+            });
+        }
+        else{
+            sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
+            if(randomPots > 0){
+                AlertDiag.show(myHp.getContext(), R.drawable.revive_notice, "You received " + randomPots + " revive potions.", "Ok", (dialogInterface, i) -> {
+                    sharedPreference.setData("savedInfo", "revive", String.valueOf(revive+randomPots));
+                    refresh();
+                });
+            }
+            else{
+                refresh();
+            }
+        }
+    }
     public void refresh(){
         finish();
         overridePendingTransition( 0, 0);
         startActivity(getIntent());
         overridePendingTransition( 0, 0);
+    }
+    public void updateRevive(){
+        revive = Integer.parseInt(sharedPreference.getData("savedInfo", "revive"));
+        potions_view = findViewById(R.id.potionsView);
+        mLayoutManager = new LinearLayoutManager(potions_view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        if(revive > 10){
+            Log.d("isEntered", String.valueOf(revive));
+            potions_adapter = new PotionsAdapter(10);
+            potions_view.setAdapter(potions_adapter);
+            potions_view.setLayoutManager(mLayoutManager);
+        }
+        else{
+            Log.d("isEntered", String.valueOf(revive));
+            potions_adapter = new PotionsAdapter(revive);
+            potions_view.setAdapter(potions_adapter);
+            potions_view.setLayoutManager(mLayoutManager);
+        }
+        if(revive - 10 > 0){
+            potions_view1 = findViewById(R.id.potionsView1);
+            mLayoutManager1 = new LinearLayoutManager(potions_view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+            potions1_adapter = new PotionsAdapter(revive - 10);
+            potions_view1.setAdapter(potions1_adapter);
+            potions_view1.setLayoutManager(mLayoutManager1);
+        }
     }
 }
