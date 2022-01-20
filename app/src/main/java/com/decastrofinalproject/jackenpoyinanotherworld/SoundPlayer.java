@@ -18,4 +18,7 @@ public class SoundPlayer {
     public void pause(){
         mPlayer.pause();
     }
+    public boolean isPlaying(){
+        return mPlayer.isPlaying();
+    }
 }

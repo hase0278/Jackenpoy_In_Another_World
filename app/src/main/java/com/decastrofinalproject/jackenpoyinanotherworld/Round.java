@@ -120,10 +120,12 @@ public class Round extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onResume() {
+        super.onResume();
         soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
-        bg.play();
+        if(!bg.isPlaying()) {
+            bg.play();
+        }
     }
 
     public void setEnemyMaxHp(int maxHp){
