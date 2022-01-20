@@ -135,6 +135,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold" />
         </RelativeLayout>
+
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -201,7 +202,8 @@
                 android:contentDescription="@string/todo"
 
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/rock" />
+                app:srcCompat="@drawable/rock"
+                tools:ignore="ImageContrastCheck" />
 
             <TextView
                 android:id="@+id/vsLbl"
@@ -234,7 +236,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/todo"
-                app:srcCompat="@drawable/scissors_enemy" />
+                app:srcCompat="@drawable/scissors_enemy"
+                tools:ignore="ImageContrastCheck" />
         </LinearLayout>
     </LinearLayout>
 
@@ -244,5 +247,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.76" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/potionsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/enemyGuide"
+        app:layout_constraintHorizontal_bias="0.072"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/playerGuide"
+        app:layout_constraintVertical_bias="0.0"
+        tools:itemCount="1"
+        tools:listitem="@layout/recycler_view_item" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/potionsView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="108dp"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/enemyGuide"
+        app:layout_constraintHorizontal_bias="0.075"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/potionsView"
+        app:layout_constraintVertical_bias="0.0"
+        tools:itemCount="1"
+        tools:listitem="@layout/recycler_view_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

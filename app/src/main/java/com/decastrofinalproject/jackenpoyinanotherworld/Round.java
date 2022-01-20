@@ -181,14 +181,19 @@ public class Round extends AppCompatActivity {
         myHp.setProgress(hp);
         playerHpRemaining.setText(hp > 0?String.valueOf(hp):String.valueOf(0));
         if(hp <= 0){
-            Toast.makeText(getApplicationContext(), CenteredToast.centerText("Game over! You lose!"), Toast.LENGTH_LONG).show();
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(() -> {
-                Intent home = new Intent(Round.this, HomeActivity.class);
-                sharedPreference.setData("savedInfo", "round", "1");
-                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(home);
-            }, 300);
+            bg.stop();
+            soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.youlose);
+            soundEffects.play();
+            AlertDiag.show(myHp.getContext(), R.drawable.lose, "You lose","Ok", (dialogInterface, i) -> {
+                soundEffects.stop();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(() -> {
+                    Intent home = new Intent(Round.this, HomeActivity.class);
+                    sharedPreference.setData("savedInfo", "round", "1");
+                    home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(home);
+                }, 300);
+            });
         }
     }
     public void determineWinner(int youWeapon){
