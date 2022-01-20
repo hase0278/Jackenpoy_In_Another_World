@@ -238,14 +238,12 @@ public class Round extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), CenteredToast.centerText("Both weapons repelled. No damage received."), Toast.LENGTH_SHORT).show();
         }
         else if(((youWeapon == R.drawable.scissors) && (enemyWeapons[index] == R.drawable.paper_enemy)) || ((youWeapon == R.drawable.paper) && (enemyWeapons[index] == R.drawable.rock_enemy)) || ((youWeapon == R.drawable.rock) && (enemyWeapons[index] == R.drawable.scissors_enemy))){
-            Toast.makeText(getApplicationContext(), CenteredToast.centerText("You repelled " + enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)).toLowerCase() +"'s weapon."), Toast.LENGTH_SHORT).show();
             handler.postDelayed(() -> {
                 // Do something after 5s = 5000ms
                 setEnemyHpNow(enemies[enemyIndex].getHp() - character.getDmg());
             }, 1000);
         }
         else{
-            Toast.makeText(getApplicationContext(), CenteredToast.centerText(enemies[enemyIndex].getName().replace("<num>", String.valueOf(enemyIndex + 1)) +" repelled your weapon."), Toast.LENGTH_SHORT).show();
             handler.postDelayed(() -> {
                 // Do something after 5s = 5000ms
                 setMyHpNow(character.getHp() - enemies[enemyIndex].getDmg());
@@ -272,9 +270,8 @@ public class Round extends AppCompatActivity {
         int randomPots = random.nextInt(3);
         Log.d("randomPots", String.valueOf(randomPots));
         if(round == 10){
-            AlertDiag.show(myHp.getContext(), R.drawable.win, "You win", "Go home.", (dialogInterface, i) -> {
-                sharedPreference.setData("savedInfo", "revive", "0");
-                sharedPreference.setData("savedInfo", "round", "1");
+            AlertDiag.show(myHp.getContext(), R.drawable.win, "You win", "Go home", (dialogInterface, i) -> {
+                sharedPreference.clearData("savedInfo");
                 Intent home = new Intent(Round.this, HomeActivity.class);
                 home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(home);
