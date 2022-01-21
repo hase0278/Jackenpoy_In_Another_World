@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,7 +68,7 @@ public class Round extends AppCompatActivity {
         String side = sharedPreference.getData("savedInfo", "side");
         soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
         if(round == 10){
-            bg = new SoundPlayer(getApplicationContext(), true, R.raw.bgtwo);
+            bg = new SoundPlayer(getApplicationContext(), true, R.raw.bgfinal);
             if(side.equals("human")){
                 background.setBackgroundResource(R.drawable.castle_demon);
             }
@@ -214,12 +213,7 @@ public class Round extends AppCompatActivity {
                 soundEffects.play();
                 revive--;
                 sharedPreference.setData("savedInfo", "revive", String.valueOf(revive));
-                if(revive > 10){
-                    potions_adapter.changeItemSize(10);
-                }
-                else{
-                    potions_adapter.changeItemSize(revive);
-                }
+                potions_adapter.changeItemSize(Math.min(revive, 10));
                 if(revive - 10 > 0){
                     potions1_adapter.changeItemSize(revive - 10);
                 }
@@ -312,14 +306,12 @@ public class Round extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(potions_view.getContext(), LinearLayoutManager.HORIZONTAL, false);
         if(revive > 10){
             potions_adapter = new PotionsAdapter(10);
-            potions_view.setAdapter(potions_adapter);
-            potions_view.setLayoutManager(mLayoutManager);
         }
         else{
             potions_adapter = new PotionsAdapter(revive);
-            potions_view.setAdapter(potions_adapter);
-            potions_view.setLayoutManager(mLayoutManager);
         }
+        potions_view.setAdapter(potions_adapter);
+        potions_view.setLayoutManager(mLayoutManager);
         if(revive - 10 > 0){
             potions_view1 = findViewById(R.id.potionsView1);
             mLayoutManager1 = new LinearLayoutManager(potions_view.getContext(), LinearLayoutManager.HORIZONTAL, false);
