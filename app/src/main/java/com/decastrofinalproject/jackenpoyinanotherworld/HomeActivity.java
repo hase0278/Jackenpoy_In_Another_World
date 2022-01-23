@@ -33,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
             sharedPreference.setData("savedInfo", "side", "human");
             sharedPreference.setData("savedInfo", "round", "1");
             sharedPreference.setData("savedInfo", "revive", "0");
+            sharedPreference.setData("savedInfo", "allegianceStats", "no");
         }
         LinearLayout home = findViewById(R.id.homeContainer);
         home.setOnClickListener(view -> {
@@ -40,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
             round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             player.stop();
             startActivity(round);
+            this.finish();
         });
     }
     @Override

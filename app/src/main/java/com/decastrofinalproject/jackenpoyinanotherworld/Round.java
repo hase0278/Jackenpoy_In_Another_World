@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,7 @@ public class Round extends AppCompatActivity {
     private int enemyIndex;
     private int round;
     private int revive;
+    private String side;
     protected RecyclerView potions_view;
     protected RecyclerView potions_view1;
     protected PotionsAdapter potions_adapter;
@@ -65,7 +67,7 @@ public class Round extends AppCompatActivity {
         round = Integer.parseInt(sharedPreference.getData("savedInfo", "round"));
         updateRevive();
         ConstraintLayout background = findViewById(R.id.roundBackGround);
-        String side = sharedPreference.getData("savedInfo", "side");
+        side = sharedPreference.getData("savedInfo", "side");
         soundEffects = new SoundPlayer(getApplicationContext(), false, R.raw.repel);
         if(round == 10){
             bg = new SoundPlayer(getApplicationContext(), true, R.raw.bgfinal);
@@ -115,11 +117,23 @@ public class Round extends AppCompatActivity {
         yourWeapon = findViewById(R.id.yourWeap);
         enemyWeapon = findViewById(R.id.enemyWeap);
         rock = findViewById(R.id.rock);
-        rock.setOnClickListener(view -> determineWinner(R.drawable.rock));
+        rock.setOnClickListener(view -> {
+            if(!(myHp.getProgress() == 0 || enemyHp.getProgress() == 0)){
+                determineWinner(R.drawable.rock);
+            }
+        });
         paper = findViewById(R.id.paper);
-        paper.setOnClickListener(view -> determineWinner(R.drawable.paper));
+        paper.setOnClickListener(view -> {
+            if(!(myHp.getProgress() == 0 || enemyHp.getProgress() == 0)){
+                determineWinner(R.drawable.paper);
+            }
+        });
         scissors = findViewById(R.id.scissors);
-        scissors.setOnClickListener(view -> determineWinner(R.drawable.scissors));
+        scissors.setOnClickListener(view -> {
+            if(!(myHp.getProgress() == 0 || enemyHp.getProgress() == 0)){
+                determineWinner(R.drawable.scissors);
+            }
+        });
         setWeaponsVisibility(View.VISIBLE, View.GONE);
     }
 
@@ -263,9 +277,6 @@ public class Round extends AppCompatActivity {
         vsLbl.setVisibility(visibility2);
     }
     public void newRound(){
-        Random random = new Random();
-        int randomPots = random.nextInt(3);
-        Log.d("randomPots", String.valueOf(randomPots));
         if(round == 10){
             bg.stop();
             soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.youwin);
@@ -278,20 +289,32 @@ public class Round extends AppCompatActivity {
                 startActivity(home);
             });
         }
+        else if(round > 3 && round < 7 && !sharedPreference.getData("savedInfo", "allegianceStats").equals("changed")){
+            AlertDiag.show(myHp.getContext(), side, (dialogInterface, i) -> {
+                sharedPreference.setData("savedInfo", "side", side.equals("human")?"demon":"human");
+                sharedPreference.setData("savedInfo", "allegianceStats", "changed");
+                roundAdd();
+            }, (dialogInterface, i) -> roundAdd());
+        }
         else{
-            sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
-            if(randomPots > 0){
-                soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.divine);
-                soundEffects.play();
-                AlertDiag.show(myHp.getContext(), R.drawable.revive_notice, "You received " + randomPots + " revive potions.", "Ok", (dialogInterface, i) -> {
-                    soundEffects.stop();
-                    sharedPreference.setData("savedInfo", "revive", String.valueOf(revive+randomPots));
-                    refresh();
-                });
-            }
-            else{
+            roundAdd();
+        }
+    }
+    public void roundAdd(){
+        Random random = new Random();
+        int randomPots = random.nextInt(3);
+        sharedPreference.setData("savedInfo", "round", String.valueOf(round+1));
+        if(randomPots > 0){
+            soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.divine);
+            soundEffects.play();
+            AlertDiag.show(myHp.getContext(), R.drawable.revive_notice, "You received " + randomPots + " revive potions.", "Ok", (dialogInterface, i) -> {
+                soundEffects.stop();
+                sharedPreference.setData("savedInfo", "revive", String.valueOf(revive+randomPots));
                 refresh();
-            }
+            });
+        }
+        else{
+            refresh();
         }
     }
     public void refresh(){

@@ -21,4 +21,13 @@ public class AlertDiag {
         alertadd.setPositiveButton(neutralBtnMessage, listener);
         alertadd.show();
     }
+    public static void show(Context context, String side, DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener){
+        String side1 = side.equals("human")?"demon":"human";
+        AlertDialog.Builder alertadd = new AlertDialog.Builder(context);
+        alertadd.setTitle("Change allegiance?");
+        alertadd.setMessage("Change allegiance from " + side + " to " + side1 + "?");
+        alertadd.setPositiveButton("Yes", positiveListener);
+        alertadd.setNegativeButton("No", negativeListener);
+        alertadd.show();
+    }
 }
