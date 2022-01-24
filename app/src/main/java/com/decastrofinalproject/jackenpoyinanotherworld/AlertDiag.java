@@ -16,6 +16,7 @@ public class AlertDiag {
         final View view = factory.inflate(R.layout.custom_alert_dialog, null);
         ImageView image = view.findViewById(R.id.dialog_imageview);
         image.setImageResource(imageFromResource);
+        alertadd.setCancelable(false);
         alertadd.setView(view);
         alertadd.setTitle(title);
         alertadd.setPositiveButton(neutralBtnMessage, listener);
@@ -28,6 +29,7 @@ public class AlertDiag {
         alertadd.setMessage("Change allegiance from " + side + " to " + side1 + "?");
         alertadd.setPositiveButton("Yes", positiveListener);
         alertadd.setNegativeButton("No", negativeListener);
+        alertadd.setCancelable(false);
         alertadd.show();
     }
 }

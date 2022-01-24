@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
@@ -29,19 +28,29 @@ public class HomeActivity extends AppCompatActivity {
         });
         SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(getApplicationContext());
         if(!sharedPreference.doesKeyExist("savedInfo", "side")){
-            Log.d("side", "side");
             sharedPreference.setData("savedInfo", "side", "human");
             sharedPreference.setData("savedInfo", "round", "1");
             sharedPreference.setData("savedInfo", "revive", "0");
             sharedPreference.setData("savedInfo", "allegianceStats", "no");
+            sharedPreference.setData("savedInfo", "introPlayed", "no");
         }
         LinearLayout home = findViewById(R.id.homeContainer);
         home.setOnClickListener(view -> {
-            Intent round = new Intent(HomeActivity.this, Round.class);
-            round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            player.stop();
-            startActivity(round);
-            this.finish();
+            if(sharedPreference.getData("savedInfo", "introPlayed").equals("no")){
+                Intent intro = new Intent(HomeActivity.this, Intro.class);
+                intro.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                player.stop();
+                startActivity(intro);
+                finish();
+            }
+            else
+            {
+                Intent round = new Intent(HomeActivity.this, Round.class);
+                round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                player.stop();
+                startActivity(round);
+                this.finish();
+            }
         });
     }
     @Override

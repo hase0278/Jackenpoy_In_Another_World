@@ -3,9 +3,11 @@
     <string name="click_anywhere_to_start">Tap to start</string>
     <string name="enemy_name">Enemy name</string>
     <string name="round_x">Round x</string>
-    <string name="you">You</string>
+    <string name="you">Yamato</string>
     <string name="todo">TODO</string>
     <string name="choose_your_weapon">Choose Your Weapon</string>
     <string name="vs">VS</string>
     <string name="hp">HP</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
 </resources>

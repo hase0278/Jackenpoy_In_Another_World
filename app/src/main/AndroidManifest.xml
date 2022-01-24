@@ -8,11 +8,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_rock_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.JackenpoyInAnotherWorld">
+        android:theme="@style/Theme.JackenpoyInAnotherWorld"
+        android:fullBackupContent="false">
+        <activity
+            android:name=".Intro"
+            android:exported="false"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".Round"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".HomeActivity"
             android:exported="true"
