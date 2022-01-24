@@ -276,16 +276,10 @@ public class Round extends AppCompatActivity {
     }
     public void newRound(){
         if(round == 10){
-            bg.stop();
-            soundEffects = new SoundPlayer(myHp.getContext(), false, R.raw.youwin);
-            soundEffects.play();
-            AlertDiag.show(myHp.getContext(), R.drawable.win, "You win", "Go home", (dialogInterface, i) -> {
-                soundEffects.stop();
-                sharedPreference.clearData("savedInfo");
-                Intent home = new Intent(Round.this, HomeActivity.class);
-                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(home);
-            });
+            Intent intent = new Intent(Round.this, Outro.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
         }
         else if(round > 3 && round < 7 && !sharedPreference.getData("savedInfo", "allegianceStats").equals("changed")){
             AlertDiag.show(myHp.getContext(), side, (dialogInterface, i) -> {

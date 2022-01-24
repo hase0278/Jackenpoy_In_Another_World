@@ -25,33 +25,27 @@ public class Intro extends AppCompatActivity {
         SharedPreferenceAccessor sharedPreference = new SharedPreferenceAccessor(layout.getContext());
 
         Button skip = findViewById(R.id.skip);
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        skip.setOnClickListener(view -> {
+            sharedPreference.setData("savedInfo", "introPlayed", "yes");
+            Intent round = new Intent(Intro.this, Round.class);
+            round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            player.stop();
+            startActivity(round);
+            finish();
+        });
+        Button next = findViewById(R.id.next);
+        next.setOnClickListener(view -> {
+            if(storyIndex != storyContents.length - 1){
+                storyIndex++;
+                layout.setBackgroundResource(storyContents[storyIndex]);
+            }
+            else{
                 sharedPreference.setData("savedInfo", "introPlayed", "yes");
                 Intent round = new Intent(Intro.this, Round.class);
                 round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 player.stop();
                 startActivity(round);
                 finish();
-            }
-        });
-        Button next = findViewById(R.id.next);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(storyIndex != storyContents.length - 1){
-                    storyIndex++;
-                    layout.setBackgroundResource(storyContents[storyIndex]);
-                }
-                else{
-                    sharedPreference.setData("savedInfo", "introPlayed", "yes");
-                    Intent round = new Intent(Intro.this, Round.class);
-                    round.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    player.stop();
-                    startActivity(round);
-                    finish();
-                }
             }
         });
     }
